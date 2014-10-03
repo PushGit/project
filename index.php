@@ -1,7 +1,10 @@
 <?php 
 /*function __autoload($classname)
 {
-	include('models/' . $classname . '.php');
+	//echo $classname;
+	//$path = str_replace('_', DIRECTORY_SEPARATOR, $classname);
+	
+		include($classname . '.php');
 }*/
 ?>
 <?php include "/models/model.php";?>
@@ -10,7 +13,6 @@
 
 <?php include  "header.php" ; ?>
 <?php include  "sidebar.php"; ?>
-<?php //include "check.php";?>
 
 <div id="page">
 <div class="content">
@@ -22,17 +24,7 @@
 шаблоны в википедии
 
 
-*/
-//$f = new AddUser();
-//$f->GetFuck();
-
-
-
-
-
-
-
-/*//var_dump($_SERVER["REQUEST_URI"]);
+/*var_dump($_SERVER["REQUEST_URI"]);
 //$route = explode("/", $_SERVER["REQUEST_URI"]);
 //var_dump($route);
 //die(0);
@@ -70,60 +62,29 @@
 
 
    */
-        $page = @$_GET['page'];
-
-        if($page == null)
-        {
-        	\controller\main_controller();
-        }
-        else 
-        {
-        	$p='\controller\controller_'. $page;
-        	$p();
-        }
-    
-
-	
-/*
-switch (@$_GET['page']) 
+$namespace=@$_GET['namespace'];
+$page = @$_GET['page'];
+$action = @$_GET['action'];
+if($namespace==null)
 {
-	case null: 
-	main_controller();//сделать поиск на главной странице
-	break;
-	
-	case "companies": 
-	controller_companies_index();
-	break;
-	
-	case "products": 
-	controller_products_index();
-	break;
-	
-	case "insertCompany"; 
-	set_cookie("insertCompany", "1");
-	controller_insertCompany();
-	break;
-	
-	case "insertProduct"; 
-	set_cookie("insertProduct","1");
-	controller_insertProduct();
-	break;
-
-	case "login": 
-	controller_login_index();
-	break;
-
-	case "logout": 
-	logout();
-	break;
-	
-	case "reg": 
-	controller_reg_index();
-	break;
+	if($action == null)
+	{
+		\controller\main::view();
+	}
+	else 
+	{
+		$p='\controller\\'.$page;
+		$i = new $p();
+		$i->$action();
+	}
+}
+else
+{
+	$p='\\'.$namespace.'\\'.$page;
+	$i = new $p();
+	$i->$action();
 }
 
-
-*/
 ?>
 </div>
 </div>

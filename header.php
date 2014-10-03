@@ -13,10 +13,10 @@
   <form method="GET" action="index.php">
     <ul>
       <li><a href="index.php">Главная</a></li>
-      <li><a href="index.php?page=companies">Компании</a></li>
+      <li><a href="index.php?page=companies&action=view">Компании</a></li>
     </ul>
   </form>
   </div>
 
-<?php \controller\login();
+<?php \controller\main::enter();
 echo "</div>";?>
