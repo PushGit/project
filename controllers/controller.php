@@ -1,8 +1,6 @@
 <?php 
 
 namespace controller;
-use view\first as vFirst;
-use view\main as vMain;
 use model\user as mUser;
 use model\dateBase as dateBase;
 use view\products as vProducts;
@@ -144,25 +142,24 @@ function controller_pages($page)
  	$id=@$_GET['id'];
 	echo "<div class=pages>";
 	if (empty($_GET['p']))
-		{
-		  $_GET['p'] = 1;
-		}
+	{
+	  $_GET['p'] = 1;
+	}
 	$p = $_GET['p'];
 	
-		if(!empty($_GET['nameCompany']))
-		{
-			$nameCompany = @$_GET['nameCompany'];
-		}
-		else
-		{
-			$nameCompany = @$_POST['nameCompany'];
-		}
-
-		$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE name LIKE '%$nameCompany%'"));
-	 $num_on_page = 10;
-	 $pages = ceil($max_items/$num_on_page);
-	 for ($i=1; $i<=$pages; $i++)
-	 {
+	if(!empty($_GET['nameCompany']))
+	{
+		$nameCompany = @$_GET['nameCompany'];
+	}
+	else
+	{
+		$nameCompany = @$_POST['nameCompany'];
+	}
+	$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE name LIKE '%$nameCompany%'"));
+	$num_on_page = 10;
+	$pages = ceil($max_items/$num_on_page);
+	for ($i=1; $i<=$pages; $i++)
+	{
 		if ($i!=$p) 
 		{
 			if(!empty($_GET['nameCompany']))
@@ -174,17 +171,15 @@ function controller_pages($page)
 				$nameCompany = @$_POST['nameCompany'];
 			}
 			if($nameCompany == null)
-			 	{
-			 		echo "<form id=text_new><a href=index.php?page=companies&action=view&p={$i}>{$i}</a>";
-			 	}
-			 	else
-			 	{
-			 		echo "<form id=text_new><a href=index.php?page=companies&action=view&nameCompany=$nameCompany&p={$i}>{$i}</a>";
-			 	}
-			
+		 	{
+		 		echo "<form id=text_new><a href=index.php?page=companies&action=view&p={$i}>{$i}</a>";
+		 	}
+		 	else
+		 	{
+		 		echo "<form id=text_new><a href=index.php?page=companies&action=view&nameCompany=$nameCompany&p={$i}>{$i}</a>";
+		 	}
 		}
 		else echo "<form id=text_new><b>{$i}</b>";
-		
 	 }
 	echo "</div>";
 	dateBase::close_bd();

@@ -186,10 +186,6 @@ class companies
 	  return $ret;
 	  dateBase::close_bd();
 	}
-	public static function check()
-	{
-
-	}
 }
 
 class products
@@ -209,9 +205,8 @@ class products
 			{
 				echo "<form id=text_new>Название может состоять только из букв английского алфавита и цифр</form>";
 				products::checkEdit();
-
 			}
-			elseif(!preg_match("/^[0-9]+$/",@$_POST['newPrice']))
+			elseif(!preg_match("/^[0-9.]+$/",@$_POST['newPrice']))
 			{
 				echo "<form id=text_new>Цена может состоять только цифр<br></form>";
 				products::checkEdit();
@@ -255,7 +250,7 @@ class products
 			vProducts::edit($n,$p);
 	}
 
-	public static function insert()//добавление продукта
+	public static function insert()
 	{
 		if(isset($_POST['insert'])) 
 		{  
@@ -266,7 +261,7 @@ class products
 			$count = $row[0];
 			dateBase::close_bd();
 			
-			if(!preg_match("/^[a-z A-Z 0-9]+$/",@$_POST['nameProduct']))
+			if(!preg_match("/^[a-z A-Z 0-9_^\.]+$/",@$_POST['nameProduct']))
 			{
 				echo "<form id=text_new>Название может состоять только из букв английского алфавита и цифр</form><br>";
 				vProducts::insert();
@@ -331,8 +326,6 @@ class products
 		}
 		return $ret;
 		dateBase::close_bd();
-
-		
 	}
 
 	public static function delete()
@@ -349,13 +342,6 @@ class products
 		{
 			vProducts::delete();
 		}
-	}
-		
-
-		
-	public static function check()
-	{
-
 	}
 }
 
@@ -491,7 +477,4 @@ class user
 		}
 	}
 }
-
-
-
 ?>
