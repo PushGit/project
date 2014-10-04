@@ -60,30 +60,23 @@
 // нажимаем f5 - запрос идет повторно - получается один продукт добавляется дважды
 // защита: post-redirect-get-----------------------------------------------------------------------------------------------
 
-
+контроллер кидает в модель, модель рисует вьюху до тех пор, пока не выолнится условие, потом переход на другую модель и оттуда рисует другую вью
    */
-$namespace=@$_GET['namespace'];
+
 $page = @$_GET['page'];
 $action = @$_GET['action'];
-if($namespace==null)
+
+if($action == null)
 {
-	if($action == null)
-	{
-		\controller\main::view();
-	}
-	else 
-	{
-		$p='\controller\\'.$page;
-		$i = new $p();
-		$i->$action();
-	}
+	\controller\main::view();
 }
-else
+else 
 {
-	$p='\\'.$namespace.'\\'.$page;
+	$p='\controller\\'.$page;
 	$i = new $p();
 	$i->$action();
 }
+
 
 ?>
 </div>

@@ -18,5 +18,5 @@
   </form>
   </div>
 
-<?php \controller\main::enter();
+<?php \model\main::enter();
 echo "</div>";?>

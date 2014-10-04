@@ -65,7 +65,6 @@ class companies
 {
 	public static function doneEdit()//отредактирована
 	{
-		model\editCompany();
 		echo "<form id=text_new><h2>Компания отредактирована!</h2></form>";
 		echo "<form method=post action=index.php> 
 		<input class=button type=submit id=button_new value=ОК>";
@@ -83,8 +82,8 @@ class companies
 		}
 		dateBase::close_bd();
 
-		echo "<form action=index.php?page=companies&action=doneEdit id=text_new><h2>Редактировать компанию '$n' </h2></form>
-		<form method=post id=text_new>Наименование<br>
+		echo "<form method=post id=text_new><h2>Редактировать компанию '$n' </h2>
+		Наименование<br>
 
 		<input class=input required name=newnameCompany id=search_box value=$n>  
 		<br><br>Адрес<br>
@@ -94,11 +93,31 @@ class companies
 
 		<input class=input required name=newphone id=search_box value=$p><br><br>
 
-		<input class=button type=submit value=Редактировать id='button_new' name = but>  
+		<input class=button type=submit value=Редактировать id='button_new' name = edit>  
 		</form></h1>";
 		echo "<form method=post action=index.php> 
 		<br><input class=button type=submit id='button_new' value=Назад>
 		</form>";
+	}
+
+	public static function myCompany()
+	{
+		$id = @$_COOKIE['companyID'];
+			
+			echo "<form action=index.php?page=companies&action=edit&id=$id method=post> 
+			<br><input class=button type=submit id='button_new' value='Редактировать компанию' name = but/></form>";
+			echo "<br><form method=post action=index.php?page=companies&action=delete&id=$id><input class=button type=submit id='button_new' value='Удалить компанию' name = but/></form>";
+			
+			if(\model\main::have()!="") 
+			{
+				$id = @$_COOKIE['companyID'];
+				echo "<br><form method=post id=text_new action=index.php?page=products&action=view&id=$id> <input class=button type=submit id='button_new' value='Продукция компании'></form>";
+			}
+			else
+			{
+				echo "<br><form id=text_new><h2>У нашей компании нет продукции</h2></form>";
+				echo "<form method=post id=text_new action=index.php?page=products&action=insert> <input class=button type=submit id='button_new' value='Добавить продукцию'></form>";
+			}
 	}
 
 	public static function view($company_list)
@@ -115,7 +134,7 @@ class companies
 				$p = $_GET['nameCompany'];
 			}
 			echo "<form id=text_new><h2>Компании </h2></form>";
-			echo "<form method=post action=index.php?page=companies&action=search><input class=input name=nameCompany id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск компании'/></form>";
+			echo "<form method=post action=index.php?page=companies&action=view><input class=input name=nameCompany id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск компании'/></form>";
 			
 			if(@$_POST['nameCompany'] || @$_GET['nameCompany'])
 			{
@@ -164,7 +183,7 @@ class companies
 	public static function insert()
 	{
 		echo "<form id=text_new><h2>Добавить компанию</h2></form>
-		<form method=post id=text_new action=index.php?page=companies&action=insert> 
+		<form method=post action=index.php?page=companies&action=insert id=text_new> 
 		Наименование
 		<br><input class=input required placeholder='Введите наименование' id=search_box name=nameCompany value=>  
 		<br><br>Адрес
@@ -172,8 +191,8 @@ class companies
 		<br><br>Телефон
 		<br><input class=input required placeholder='Введите телефон' id=search_box name=phone value=>  
 		<input type=hidden name=enter value=yes> 
-		<br><br><input class=button type=submit value=Добавить id='button_new' name = button>  
-		</form></h1>";
+		<br><br><input class=button type=submit value=Добавить id='button_new' name = insert>  
+		</form>";
 	}
 
 	public static function doneDelete()
@@ -185,10 +204,9 @@ class companies
 
 	public static function delete()
 	{
-		$id=$_COOKIE['companyID'];
 		echo "<form id=text_new><h2>Вы уверены что хотите удалить компанию?</h2></form>
-		<form method=post id=text_new action=index.php?page=companies&action=delete&id=$id>
-		<br><input class=button type=submit value=Да id='button_new' name = button>  
+		<form method=post id=text_new>
+		<br><input class=button type=submit value=Да id='button_new' name = delete>  
 		</form>
 		<form method=post id=text_new action=index.php>
 		<br><input class=button type=submit value=Нет id='button_new' name = button>  
@@ -200,31 +218,21 @@ class products
 	public static function doneEdit()
 	{
 		$id = @$_COOKIE['companyID'];
-			echo "<form id=text_new><h2>Продукт отредактирован! </h2></form>
-			<form method=post action=index.php?page=products&action=view&id=$id> 
-			<input class=button type=submit id=button_new value=ОК>";
+		echo "<form id=text_new><h2>Продукт отредактирован! </h2></form>
+		<form method=post action=index.php?page=products&action=view&id=$id> 
+		<input class=button type=submit id=button_new value=ОК>";
 	}
 
-	public static function edit()
+	public static function edit($n,$p)
 	{
-		$id = $_GET['id'];
-		$result = mysqli_query(dateBase::connect(), "SELECT * FROM products WHERE id = '$id'" );
-		
-		$n = ""; 
-		$p = "";
-			while ($rslt = mysqli_fetch_row($result)) 
-		{ 
-			$n = $rslt[1]; 
-			$p = $rslt[2]; 
-		}
 		$idCompany = $_COOKIE['companyID'];
 		echo "<form id=text_new><h2>Редактировать продукт '$n'</h2></form>
-		<form method=post action=index.php?page=products&action=doneEdit&id=$id id=text_new> 
+		<form method=post id=text_new> 
 		Наименование
 		<br><input class=input required name=newnameProduct id=search_box value='$n'>  
 		<br><br>Цена
 		<br><input class=input required name=newPrice id=search_box value='$p'>  
-		<br><br><input class=button type=submit id='button_new' value=Редактировать name = but>  
+		<br><br><input class=button type=submit id='button_new' value=Редактировать name = edit>  
 		</form></h1>
 		<form method=post action=index.php?page=products&action=view&id=$idCompany> 
 		<br><input class=button type=submit id='button_new' value=Назад>
@@ -236,7 +244,7 @@ class products
 		if($products_list)
 		{
 			echo "<form method=post id=text_new><h2>Продукция нашей компании</h2></form>";
-				\view\products::search();
+			products::search();
 			echo "
 			<form method=post id=text_new action=index.php?page=products&action=insert> <input class=show_all type=submit id='button_new' value='Добавить продукт''>
 			
@@ -255,7 +263,7 @@ class products
 				  echo "<td>" . $row['id'] . "</td>";
 				  echo "<td>" . $row['name'] . "</td>";
 				  echo "<td>" . $row['price'] . "</td>";
-				  echo "<td><a name=\"del\" href=\"index.php?page=products&action=qDelete&id=".$row["id"]."\"><img src=\"delete.png\" style=\"width: 16px; height: 16px;\"> Удалить</a>
+				  echo "<td><a name=\"del\" href=\"index.php?page=products&action=delete&id=".$row["id"]."\"><img src=\"delete.png\" style=\"width: 16px; height: 16px;\"> Удалить</a>
 				  <a name=\"edit\" href=\"index.php?page=products&action=edit&id=".$row["id"]."\"><img src=\"edit.png\" style=\"width: 16px; height: 16px;\">Редактировать</a>
 				  </td>\n";
 				  echo "</tr>";
@@ -265,9 +273,9 @@ class products
 		}
 		else
 		{
-			if(@$_GET['nameProduct'])
+			if(@$_GET['nameProduct'] || @$_POST['nameProduct'] )
 			{
-			$id = $_GET['id'];
+				$id = $_GET['id'];
 				echo "<form id=text_new><h2>У нас нет подходящей продукции</h2> </form>
 				<form method=post action=index.php?page=products&action=view&id=$id> 
 				<br><input class=button type=submit id='button_new' value=Назад>
@@ -350,16 +358,16 @@ class products
 		{
 			$p = $_GET['nameProduct'];
 		}
-		echo "<form method=post action=index.php?page=products&action=search&id=$id><input class=input name=nameProduct id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск продукции'/></form>";
-		if(@$_POST['nameProduct'] || @$_GET['nameProduct'])
+		echo "<form method=post action=index.php?page=products&action=view&id=$id><input class=input name=nameProduct id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск продукции'/></form>";
+		if($p!="")
 		{
-			echo "<form method=post action=index.php?page=products&action=view&id=$id><input class=show_all type=submit id='button_new' value='Показать все'></form>";
+			echo "<form method=post action=index.php?page=products&action=view&id=$id><input class=show_allp type=submit id='button_new' value='Показать все'></form>";
 		}
 	}
 	public static function doneDelete()
 	{
 		$id=$_COOKIE['companyID'];
-		if(\model\have()!="")
+		if(\model\main::have()!="")
 		{
 			echo "<form id=text_new><h2>Продукт удален!</h2></form>
 			<form method=post action=index.php?page=products&action=view&id=$id> 
@@ -380,11 +388,11 @@ class products
 		$idCompany=$_COOKIE['companyID'];
 		$id=$_GET['id'];
 		echo "<form id=text_new><h2>Вы уверены что хотите удалить продукт?</h2></form>
-		<form method=post id=text_new action=index.php?page=products&action=delete&id=$id>
-		<br><input class=button type=submit value=Да id='button_new' name = button>  
+		<form method=post id=text_new >
+		<br><input class=button type=submit value=Да id='button_new' name = delete>  
 		</form>
 		<form method=post id=text_new action=index.php?page=products&action=view&id=$idCompany>
-		<br><input class=button type=submit value=Нет id='button_new' name = button>  
+		<br><input class=button type=submit value=Нет id='button_new'>  
 		</form>";
 	}
 
@@ -401,15 +409,15 @@ class products
 	{
 		$id=$_COOKIE['companyID'];
 		echo "<form id=text_new><h2>Добавить продукт</h2></form>
-		<br><form method=post id=text_new action=index.php?page=products&action=doneInsert> 
+		<br><form method=post id=text_new> 
 		Наименование
 		<br><input class=input required placeholder='Введите наименование' id=search_box name=nameProduct value=>  
 		<br><br>Cтоимость
 		<br><input class=input required placeholder='Введите стоимость' id=search_box name=price value=>  
 		<input type=hidden name=enter value=yes> 
-		<br><br><input class=button type=submit id='button_new' value=Добавить name = button>  
+		<br><br><input class=button type=submit id='button_new' value=Добавить name = insert>  
 		</form></h1>";
-		if(\model\have()!="")
+		if(\model\main::have()!="")
 		{
 			echo "<form method=post action=index.php?page=products&action=view&id=$id> 
 			<br><input class=button type=submit id='button_new' value=Назад>
