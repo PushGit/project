@@ -27,6 +27,10 @@ class main
 		{ 
 			mUser::login();
 		}
+		else
+		{
+			mUser::reg();
+		}
 	}	
 	public static function logout()
 	{	   
@@ -80,12 +84,15 @@ class products
 			vProducts::viewOther($data,$all);
 		}
 	}
+	public static function viewPic()
+	{
+		vProducts::viewPic();
+	}
 	public static function viewAll()
 	{
-		/*$all=1;
+		$all=1;
 		$data = mProducts::view($all);
-		vProducts::viewOther($data,$all);*/
-		vProducts::viewAll();
+		vProducts::viewOther($data,$all);
 	}
 	public static function delete()
 	{
@@ -109,6 +116,7 @@ function controller_pages_products($all)
 			  $_GET['p'] = 1;
 			}
 		$p = $_GET['p'];
+
 		if(@$_GET["id"]=="")
 		{
 			$companyID=$_COOKIE['companyID'];
@@ -117,7 +125,7 @@ function controller_pages_products($all)
 		{
 			$companyID = @$_GET["id"];
 		}
-		if(!empty($_GET['nameProduct']))
+		if(@$_GET['nameProduct'])
 		{
 			$nameProduct = @$_GET['nameProduct'];
 		}
@@ -125,9 +133,18 @@ function controller_pages_products($all)
 		{
 			$nameProduct = @$_POST['nameProduct'];
 		}
+		if(@$_GET['nameCompany'])
+		{
+			$nameCompany = @$_GET['nameCompany'];
+		}
+		else
+		{
+			$nameCompany = @$_POST['nameCompany'];
+		}
 		if($all==1)
 		{
-			$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM products, companies WHERE companies.id=products.id AND products.name LIKE '%$nameProduct%'"));
+			$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM products, companies 
+				WHERE companies.id=products.companyID AND products.name LIKE '%$nameProduct%' AND companies.nameCompany LIKE '%$nameCompany%'"));
 		}
 		else
 		{
@@ -137,25 +154,25 @@ function controller_pages_products($all)
 		$pages = ceil($max_items/$num_on_page);
 		for ($i=1; $i<=$pages; $i++)
 		 {
-			if(!empty($_GET['nameProduct']))
-			{
-				$nameProduct = @$_GET['nameProduct'];
-			}
-			else
-			{
-				$nameProduct = @$_POST['nameProduct'];
-			}
 			if($all==1)
 			{
 				if ($i!=$p) 
 				{
-				 	if($nameProduct == null)
+				 	if($nameProduct == null && $nameCompany == null)
 				 	{
 				 		echo "<form id=text_new><a href=index.php?page=products&action=viewAll&p={$i}>{$i}</a>";
 				 	}
-				 	else
+				 	elseif($nameProduct == null)
+				 	{
+						echo "<form id=text_new><a href=index.php?page=products&action=viewAll&nameCompany=$nameCompany&p={$i}>{$i}</a>";
+				 	}
+				 	elseif($nameCompany == null)
 				 	{
 				 		echo "<form id=text_new><a href=index.php?page=products&action=viewAll&nameProduct=$nameProduct&p={$i}>{$i}</a>";
+				 	}
+				 	else
+				 	{
+				 		echo "<form id=text_new><a href=index.php?page=products&action=viewAll&nameProduct=$nameProduct&nameCompany=$nameCompany&p={$i}>{$i}</a>";
 				 	}
 			 	}
 			 	else
@@ -204,7 +221,7 @@ function controller_pages($page)
 	{
 		$nameCompany = @$_POST['nameCompany'];
 	}
-	$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE name LIKE '%$nameCompany%'"));
+	$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE nameCompany LIKE '%$nameCompany%'"));
 	$num_on_page = 10;
 	$pages = ceil($max_items/$num_on_page);
 	for ($i=1; $i<=$pages; $i++)

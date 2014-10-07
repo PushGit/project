@@ -104,7 +104,7 @@ class companies
 		if(isset($_POST['insert']))
 		{
 			$nameCompany = $_POST['nameCompany']; 
-			$res = mysqli_query(dateBase::connect(), "SELECT id FROM companies WHERE name = '$nameCompany'") or die(mysqli_error());
+			$res = mysqli_query(dateBase::connect(), "SELECT id FROM companies WHERE nameCompany = '$nameCompany'") or die(mysqli_error());
 			$row = mysqli_fetch_row($res);
 			$count = $row[0];
 			dateBase::close_bd();
@@ -138,7 +138,7 @@ class companies
 
 				mysqli_query(dateBase::connect(), "INSERT INTO companies (name, adress, phone, userID) VALUES ('$name','$adress', '$phone', '$id')") or die(mysqli_error(dateBase::connect()));
 			   
-			    $result = mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE name = '$name'");
+			    $result = mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE nameCompany = '$name'");
 				while ($rslt = mysqli_fetch_row($result)) 
 				{ 
 					$newID = $rslt[0]; 
@@ -177,7 +177,7 @@ class companies
 		}
 		
 		$ret = array();
-		$result = mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE name LIKE '%$nameCompany%' LIMIT {$from}, {$num_on_page}" );
+		$result = mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE nameCompany LIKE '%$nameCompany%' LIMIT {$from}, {$num_on_page}" );
 		
 	  while($row = mysqli_fetch_array($result))
 	  {
@@ -305,6 +305,7 @@ class products
 		}
 		else $p = $_GET["p"];
 		 $nameProduct="";
+		 $nameCompany="";
 		$num_on_page = 10;
 		$from = ($p-1)*$num_on_page;
 
@@ -328,7 +329,18 @@ class products
 		$ret = array();
 		if($all==1)
 		{
-			$result = mysqli_query(dateBase::connect(), "SELECT companies.name, products.name, products.price FROM companies, products WHERE companies.id=products.companyID AND products.name LIKE '%$nameProduct%' LIMIT {$from}, {$num_on_page}" );
+			if(!empty($_GET['nameCompany']))
+			{
+				$nameCompany = @$_GET['nameCompany'];
+			}
+			elseif(!empty($_POST['nameCompany']))
+			{
+				$nameCompany = @$_POST['nameCompany'];
+			}
+
+			$result = mysqli_query(dateBase::connect(), "SELECT companies.nameCompany, products.name, products.price 
+				FROM companies, products WHERE companies.id=products.companyID AND products.name LIKE '%$nameProduct%' AND companies.nameCompany LIKE '%$nameCompany%' 
+				ORDER BY companies.nameCompany LIMIT {$from}, {$num_on_page}" );
 		}
 		else
 		{

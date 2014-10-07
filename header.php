@@ -29,7 +29,7 @@
             </ul>
           </li>
          <script src='bootstrap.js'></script>
-<script src='jquery.js'></script>
+          <script src='jquery.js'></script>
           <li class='dropdown'>
             <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Контакты<b class='caret'></b></a>
             <ul class='dropdown-menu'>
@@ -40,15 +40,10 @@
           </li>
           <li><a href='#'>О нас</a></li>
         </ul>
-        <form class='navbar-form pull-right' method=post action=index.php?page=main&action=login>
-      <input type=text  required name=login placeholder='Login' id='search_box' value=>
-      <input type=password required name=password placeholder='Password' id='search_box'>
-      <button type=submit id='button_new' >Войти</button>
-      <button type=submit id='button_new' >Зарегистрироваться</button>
-      </form>
+        
       </nav>
       </div>
-
+      
     
 
 
@@ -56,15 +51,37 @@
 
 
 </body>
+<style>
+.block2{
+    height: 180px;
+    background: #666;
+  }
+  </style>
+    <body>
+         
+    <script src="js/bootstrap.js"></script>
+    <script src='js/jquery.js'></script>
+   <div class='container-fluid'>
+     <div class='row'>
+       
+        
+         <div class='span2 block2'></div>
+         <div class='span2 block'></div>
+         <div class='span2 block2'></div>
+        
+       </div></div>
+     
+
+  </body>
  </html>
 
-<?php /*\model\main::enter();
-</div>";
-/*
+<?php
 
+/*
 <div id="wrapper">до <div id="header">
 
-
+ \model\main::enter();
+"</div>";
 
  <div id="header_nav">
   <form method="GET" action="index.php">
@@ -76,39 +93,11 @@
   </form>
   </div>
 
-<div class='carousel slide' id='myCarousel'>
-  <ol class='carousel-indicators'>
-    <li class='active' data-target='#myCarousel' data-slide-to='0'></li>
-    <li data-target='#myCarousel' data-slide-to='1'></li>
-    <li data-target='#myCarousel' data-slide-to='2'></li>
-  </ol>
-  <div class='carousel-inner'>
-    <div class='item active'>
-      <img src='1.jpg'>
-      <div class='carousel-caption'>
-        <h4>Заголовок1</h4>
-        <p>Текст описания</p>
-      </div>
-    </div>
-    <div class='item'>
-      <img src='2.jpg'>
-      <div class='carousel-caption'>
-        <h4>Заголовок2</h4>
-        <p>Текст описания</p>
-      </div>
-    </div>
-    <div class='item'>
-      <img src='3.jpg'>
-      <div class='carousel-caption'>
-        <h4>Заголовок3</h4>
-        <p>Текст описания</p>
-      </div>
-    </div>
-</div>
-<script src='bootstrap.js'></script>
-<script src='jquery.js'></script>
-<a class='carousel-control left' data-slide='prev' href='#myCarousel'>&lsaquo;</a>
-<a class='carousel-control right' data-slide='next' href='#myCarousel'>&rsaquo;</a>
-</div>
+<form class='navbar-form pull-right' method=post action=index.php?page=main&action=login>
+      <input type=text  required name=login placeholder='Login' id='search_box' value=>
+      <input type=password required name=password placeholder='Password' id='search_box'>
+      <button type=submit id='button_new' >Войти</button>
+      <button type=submit id='button_new' >Зарегистрироваться</button>
+      </form>
 */
 ?>
