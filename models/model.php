@@ -297,7 +297,7 @@ class products
 		}
 	}
 
-	public static function view()
+	public static function view($all)
 	{
 		if (empty($_GET["p"]))
 		{
@@ -316,10 +316,25 @@ class products
 		{
 			$nameProduct = @$_POST['nameProduct'];
 		}
-		$companyID = @$_GET["id"];
-		$ret = array();
-		$result = mysqli_query(dateBase::connect(), "SELECT * FROM products WHERE companyID = $companyID AND name LIKE '%$nameProduct%' LIMIT {$from}, {$num_on_page}" );
 		
+		if(@$_GET["id"]=="")
+		{
+			$companyID=$_COOKIE['companyID'];
+		}
+		else
+		{
+			$companyID = @$_GET["id"];
+		}
+		$ret = array();
+		if($all==1)
+		{
+			$result = mysqli_query(dateBase::connect(), "SELECT companies.name, products.name, products.price FROM companies, products WHERE companies.id=products.companyID AND products.name LIKE '%$nameProduct%' LIMIT {$from}, {$num_on_page}" );
+		}
+		else
+		{
+			$result = mysqli_query(dateBase::connect(), "SELECT * FROM products WHERE companyID = $companyID AND name LIKE '%$nameProduct%' LIMIT {$from}, {$num_on_page}" );
+
+		}
 		while($row = mysqli_fetch_array($result))
 		{
 			$ret[] = $row;

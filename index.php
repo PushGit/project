@@ -23,12 +23,6 @@
 фабрика в книге
 шаблоны в википедии
 
-
-/*var_dump($_SERVER["REQUEST_URI"]);
-//$route = explode("/", $_SERVER["REQUEST_URI"]);
-//var_dump($route);
-//die(0);
-
 // разнести более подробно на классы - один класс - одна функциональность
 // __autoload
 // PHP 5 namespace

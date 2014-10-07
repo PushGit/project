@@ -64,16 +64,28 @@ class products
 {
 	public static function view()
 	{
-		$data = mProducts::view();
+		$all=0;
+		$data = mProducts::view($all);
 		$id = @$_GET["id"];
+		if(@$_GET["id"]=="")
+		{
+			$id=$_COOKIE['companyID'];
+		}
 		if($id==$_COOKIE['companyID'])
 		{
-			vProducts::view($data);
+			vProducts::view($data,$all);
 		}
 		else
 		{
-			vProducts::viewOther($data);
+			vProducts::viewOther($data,$all);
 		}
+	}
+	public static function viewAll()
+	{
+		/*$all=1;
+		$data = mProducts::view($all);
+		vProducts::viewOther($data,$all);*/
+		vProducts::viewAll();
 	}
 	public static function delete()
 	{
@@ -89,7 +101,7 @@ class products
 	}
 }
 
-function controller_pages_products()
+function controller_pages_products($all)
 	{
 		echo "<div class=\"pages\">";
 		if (empty($_GET['p']))
@@ -97,7 +109,14 @@ function controller_pages_products()
 			  $_GET['p'] = 1;
 			}
 		$p = $_GET['p'];
-		$companyID = $_GET['id'];
+		if(@$_GET["id"]=="")
+		{
+			$companyID=$_COOKIE['companyID'];
+		}
+		else
+		{
+			$companyID = @$_GET["id"];
+		}
 		if(!empty($_GET['nameProduct']))
 		{
 			$nameProduct = @$_GET['nameProduct'];
@@ -106,8 +125,14 @@ function controller_pages_products()
 		{
 			$nameProduct = @$_POST['nameProduct'];
 		}
-		
-		$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM products WHERE companyID = '$companyID' AND name LIKE '%$nameProduct%'"));
+		if($all==1)
+		{
+			$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM products, companies WHERE companies.id=products.id AND products.name LIKE '%$nameProduct%'"));
+		}
+		else
+		{
+			$max_items = mysqli_num_rows(mysqli_query(dateBase::connect(), "SELECT * FROM products WHERE companyID = '$companyID' AND name LIKE '%$nameProduct%'"));
+		}
 		$num_on_page = 10;
 		$pages = ceil($max_items/$num_on_page);
 		for ($i=1; $i<=$pages; $i++)
@@ -120,18 +145,42 @@ function controller_pages_products()
 			{
 				$nameProduct = @$_POST['nameProduct'];
 			}
-			 if ($i!=$p) 
-			 {
-			 	if($nameProduct == null)
-			 	{
-			 		echo "<form id=text_new><a href=index.php?page=products&action=view&id={$companyID}&p={$i}>{$i}</a>";
+			if($all==1)
+			{
+				if ($i!=$p) 
+				{
+				 	if($nameProduct == null)
+				 	{
+				 		echo "<form id=text_new><a href=index.php?page=products&action=viewAll&p={$i}>{$i}</a>";
+				 	}
+				 	else
+				 	{
+				 		echo "<form id=text_new><a href=index.php?page=products&action=viewAll&nameProduct=$nameProduct&p={$i}>{$i}</a>";
+				 	}
 			 	}
 			 	else
 			 	{
-			 		echo "<form id=text_new><a href=index.php?page=products&action=view&id={$companyID}&nameProduct=$nameProduct&p={$i}>{$i}</a>";
+			 		echo "<form id=text_new><b>{$i}</b>";
+			 	} 
+			}
+			else
+			{
+				if ($i!=$p) 
+				{
+				 	if($nameProduct == null)
+				 	{
+				 		echo "<form id=text_new><a href=index.php?page=products&action=view&id={$companyID}&p={$i}>{$i}</a>";
+				 	}
+				 	else
+				 	{
+				 		echo "<form id=text_new><a href=index.php?page=products&action=view&id={$companyID}&nameProduct=$nameProduct&p={$i}>{$i}</a>";
+				 	}
 			 	}
-			 }
-			 else echo "<form id=text_new><b>{$i}</b>";
+			 	else
+			 	{
+			 		echo "<form id=text_new><b>{$i}</b>";
+			 	} 
+			}
 		 }
 		echo "</div>";
 		dateBase::close_bd();
@@ -140,7 +189,7 @@ function controller_pages_products()
 function controller_pages($page)
 {
  	$id=@$_GET['id'];
-	echo "<div class=pages>";
+	
 	if (empty($_GET['p']))
 	{
 	  $_GET['p'] = 1;
@@ -181,7 +230,7 @@ function controller_pages($page)
 		}
 		else echo "<form id=text_new><b>{$i}</b>";
 	 }
-	echo "</div>";
+	
 	dateBase::close_bd();
 }
 ?>

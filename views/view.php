@@ -1,18 +1,6 @@
 <?php
-// ------------ VIEW -------------------
-
-/*Регистрация и логин*/
 namespace view;
 use model\dateBase as dateBase;
-class first
-{
-	static function rek()
-	{
-		echo "<form method=post class=bar>";
-		echo "здесь могла быть ваша реклама";
-		echo "</form>";
-	}
-}
 class main
 {
 	
@@ -24,8 +12,9 @@ class main
 	    echo "<p>";
 	    echo "<input type=password required name=password placeholder='Password' id=search_box value=>";
 	    echo "</p>";
-	    echo "<button type=submit id=button_new>Войти</button>";
-	    echo "</form> <br><br>";
+	   
+	    echo "<button type=submit id=button_new >Войти</button>";
+	    echo "</form> ";
 
 	    echo "<form method=post action=index.php?page=main&action=reg class=login>";
 	    echo "<button type=submit id=button_new class = registration>Зарегистрироваться</button>";
@@ -82,22 +71,26 @@ class companies
 		}
 		dateBase::close_bd();
 
-		echo "<form method=post id=text_new><h2>Редактировать компанию '$n' </h2>
-		Наименование<br>
+		echo "<div class = 'container'> <article class='row'><form method=post id=text_new><header><h2>Редактировать компанию '$n' </header></h2>
+		<p class='span4'>Наименование
 
-		<input class=input required name=newnameCompany id=search_box value=$n>  
-		<br><br>Адрес<br>
+		<input class=input required name=newnameCompany id=search_box value=$n>  </p>
+		<p class='span4'>Адрес
 
-		<input class=input required name=newadress id=search_box value=$a>  
-		<br><br>Телефон<br>
+		<input class=input required name=newadress id=search_box value=$a>  </p>
+		<p class='span4'>Телефон
 
-		<input class=input required name=newphone id=search_box value=$p><br><br>
+		<input class=input required name=newphone id=search_box value=$p></p>
 
 		<input class=button type=submit value=Редактировать id='button_new' name = edit>  
-		</form></h1>";
-		echo "<form method=post action=index.php> 
-		<br><input class=button type=submit id='button_new' value=Назад>
-		</form>";
+		</form></h1>
+		<form method=post action=index.php> 
+		<input class=button type=submit id='button_new' value=Назад>
+		</form>
+    </article>
+  </div>";
+
+
 	}
 
 	public static function myCompany()
@@ -118,6 +111,8 @@ class companies
 				echo "<br><form id=text_new><h2>У нашей компании нет продукции</h2></form>";
 				echo "<form method=post id=text_new action=index.php?page=products&action=insert> <input class=button type=submit id='button_new' value='Добавить продукцию'></form>";
 			}
+
+			
 	}
 
 	public static function view($company_list)
@@ -134,11 +129,11 @@ class companies
 				$p = $_GET['nameCompany'];
 			}
 			echo "<form id=text_new><h2>Компании </h2></form>";
-			echo "<form method=post action=index.php?page=companies&action=view><input class=input name=nameCompany id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск компании'/></form>";
+			echo "<p><form method=post action=index.php?page=companies&action=view><input class=input name=nameCompany id=search_box value=$p><input class=button type=submit id='button_new' value='Поиск компании'/></form>";
 			
 			if(@$_POST['nameCompany'] || @$_GET['nameCompany'])
 			{
-				echo "<form method=post action=index.php?page=companies&action=view><input class=show_all type=submit id='button_new' value='Показать все'></form>";
+				echo "<form method=post action=index.php?page=companies&action=view><input type=submit id='button_new' value='Показать все'></form>";
 			}
 			
 			echo "<form method=post id=text_new action=index.php?page=insertCompany> 
@@ -238,8 +233,46 @@ class products
 		<br><input class=button type=submit id='button_new' value=Назад>
 		</form>";
 	}
+	
+	public static function viewAll()
+	{
+		echo "<div class='carousel slide' id='myCarousel'>
+  <ol class='carousel-indicators'>
+    <li class='active' data-target='#myCarousel' data-slide-to='0'></li>
+    <li data-target='#myCarousel' data-slide-to='1'></li>
+    <li data-target='#myCarousel' data-slide-to='2'></li>
+  </ol>
+  <div class='carousel-inner'>
+    <div class='item active'>
+      <img src='1.jpg'>
+      <div class='carousel-caption'>
+        <h4>Заголовок1</h4>
+        <p>Текст описания</p>
+      </div>
+    </div>
+    <div class='item'>
+      <img src='2.jpg'>
+      <div class='carousel-caption'>
+        <h4>Заголовок2</h4>
+        <p>Текст описания</p>
+      </div>
+    </div>
+    <div class='item'>
+      <img src='3.jpg'>
+      <div class='carousel-caption'>
+        <h4>Заголовок3</h4>
+        <p>Текст описания</p>
+      </div>
+    </div>
+</div>
+<script src='bootstrap.js'></script>
+<script src='jquery.js'></script>
+<a class='carousel-control left' data-slide='prev' href='#myCarousel'>&lsaquo;</a>
+<a class='carousel-control right' data-slide='next' href='#myCarousel'>&rsaquo;</a>
+</div>";
+	}
 
-	public static function view($products_list)
+	public static function view($products_list, $all)
 	{
 		if($products_list)
 		{
@@ -291,24 +324,74 @@ class products
 		}
 	}
 
-	public static function viewOther($products_list)
+	public static function viewOther($products_list, $all)
 	{
-		$companyID = @$_GET['id'];
-		$result = mysqli_query(dateBase::connect(), "SELECT name FROM companies WHERE id = '$companyID'" );
-			
-		while ($rslt = mysqli_fetch_row($result)) 
-		{ 
-			$n = $rslt[0]; 
-		}
-		dateBase::close_bd();
-		if($products_list)
+		$n ="";
+		if(@$_GET['id']!=null)
 		{
-			echo "<form method=post id=text_new><h2>Продукция компании '$n' </h2></form>";
+			$companyID = @$_GET['id'];
+			$result = mysqli_query(dateBase::connect(), "SELECT name FROM companies WHERE id = '$companyID'" );
+			while ($rslt = mysqli_fetch_row($result)) 
+			{ 
+				$n = $rslt[0]; 
+			}
+			dateBase::close_bd();
+		}
+		if($n!="")
+		{
+			if($products_list)
+			{
+				echo "<form method=post id=text_new><h2>Продукция компании '$n' </h2></form>";
+				\view\products::search();
+			
+				echo "<form method=post id=text_new>
+				<table class='tables'>
+				<tr class='tab_footer'>
+				<th>Товар</th>
+				<th class ='tab_adress'>Стоимость</th>
+				</tr></form>";				  	
+
+				foreach ($products_list as $row)
+				  {
+					  echo "<tr class='tab_content'>";
+					  echo "<td>" . $row['name'] . "</td>";
+					  echo "<td>" . $row['price'] . "</td>";
+					  echo "</tr>";
+				  }
+				echo "</table>";
+				\controller\controller_pages_products($all);
+				echo "<form method=post id=text_new  action=index.php?page=companies&action=view> 
+				<br><input class=button type=submit id='button_new' value=Компании></form>";
+			}
+			else
+			{
+				if(@$_POST['nameProduct'])
+				{
+					$id=$_GET['id'];
+					echo "<form id=text_new><h2>У компании '$n' нет подходящей продукции</h2> </form>";
+					echo "<form method=post action=index.php?page=products&action=view&id=$id><input class=button type=submit id='button_new' value='Показать всё'></form>
+					<form method=post action=index.php?page=companies&action=view> 
+					<br><input class=button type=submit id='button_new' value=Компании>
+					</form>";
+				}
+				else
+				{
+					echo "<form id=text_new><h2>У компании '$n' нет продукции</h2> </form>
+					<form method=post action=index.php?page=companies&action=view> 
+					<br><input class=button type=submit id='button_new' value=Компании>
+					</form>";
+				}
+			}
+		}
+		else
+		{
+			echo "<form method=post id=text_new><h2>Вся продукция</h2></form>";
 			\view\products::search();
-		
+			
 			echo "<form method=post id=text_new>
 			<table class='tables'>
 			<tr class='tab_footer'>
+			<th>Компания</th>
 			<th>Товар</th>
 			<th class ='tab_adress'>Стоимость</th>
 			</tr></form>";				  	
@@ -316,39 +399,28 @@ class products
 			foreach ($products_list as $row)
 			  {
 				  echo "<tr class='tab_content'>";
-				  echo "<td>" . $row['name'] . "</td>";
-				  echo "<td>" . $row['price'] . "</td>";
+				  echo "<td>" . $row['companies.name'] . "</td>";
+				  echo "<td>" . $row['products.name'] . "</td>";
+				  echo "<td>" . $row['products.price'] . "</td>";
 				  echo "</tr>";
 			  }
 			echo "</table>";
-			\controller\controller_pages_products($companyID);
+			\controller\controller_pages_products($all);
 			echo "<form method=post id=text_new  action=index.php?page=companies&action=view> 
 			<br><input class=button type=submit id='button_new' value=Компании></form>";
-		}
-		else
-		{
-			if(@$_POST['nameProduct'])
-			{
-				$id=$_GET['id'];
-				echo "<form id=text_new><h2>У компании '$n' нет подходящей продукции</h2> </form>";
-				echo "<form method=post action=index.php?page=products&action=view&id=$id><input class=button type=submit id='button_new' value='Показать всё'></form>
-				<form method=post action=index.php?page=companies&action=view> 
-				<br><input class=button type=submit id='button_new' value=Компании>
-				</form>";
-			}
-			else
-			{
-				echo "<form id=text_new><h2>У компании '$n' нет продукции</h2> </form>
-				<form method=post action=index.php?page=companies&action=view> 
-				<br><input class=button type=submit id='button_new' value=Компании>
-				</form>";
-			}
 		}
 	}
 
 	public static function search()
 	{
-		$id=$_GET['id'];
+		if(@$_GET["id"]=="")
+		{
+			$id=$_COOKIE['companyID'];
+		}
+		else
+		{
+			$id = @$_GET["id"];
+		}
 		$p="";
 		if(@$_POST['nameProduct'])
 		{
