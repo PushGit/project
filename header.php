@@ -51,28 +51,7 @@
 
 
 </body>
-<style>
-.block2{
-    height: 180px;
-    background: #666;
-  }
-  </style>
-    <body>
-         
-    <script src="js/bootstrap.js"></script>
-    <script src='js/jquery.js'></script>
-   <div class='container-fluid'>
-     <div class='row'>
-       
-        
-         <div class='span2 block2'></div>
-         <div class='span2 block'></div>
-         <div class='span2 block2'></div>
-        
-       </div></div>
-     
 
-  </body>
  </html>
 
 <?php
@@ -99,5 +78,39 @@
       <button type=submit id='button_new' >Войти</button>
       <button type=submit id='button_new' >Зарегистрироваться</button>
       </form>
+
+
+
+
+
+<style>
+.block2{
+    height: 180px;
+    background: #666;
+  }
+  </style>
+    <body>
+         
+    <script src="js/bootstrap.js"></script>
+    <script src='js/jquery.js'></script>
+   <div class='container-fluid'>
+     <div class='row'>
+       
+        
+         <div class='span2 block2'></div>
+         <div class='span2 block'></div>
+         <div class='span2 block2'></div>
+        
+       </div></div>
+     
+
+  </body>
+
+
+
+
+
+
+
 */
 ?>
