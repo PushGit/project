@@ -22,7 +22,7 @@ class main
 		}
 	}
 	public static function login()
-	{	   
+	{	  
 		if ((!empty(@$_POST['login']) && (!empty(@$_POST['password']))))
 		{ 
 			mUser::login();

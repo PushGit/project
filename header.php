@@ -10,35 +10,64 @@
   
 <div class='container' style='margin-top'>
   <div id="wrapper">
-
-
 <div class='navbar navbar-inverse navbar-fixed-top'>
       <nav class='navbar-inner'>
         <a class='brand'>Companies.ru</a>
         <ul class='nav'>
           <li class='divider-vertical'></li>
-          <li><a href='index.php'><i class='icon-home'></i>Главная</a></li>
+          <li><a href='http://companies.ru/'>Главная</a></li>
           <li><a href='index.php?page=companies&action=view'>Компании</a></li>
         
           <li class='dropdown'>
-            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Продукты<b class='caret'></b></a>
+            <a href='index.php?page=products&action=viewAll' class='dropdown-toggle' data-toggle='dropdown'>Продукты<b class='caret'></b></a>
             <ul class='dropdown-menu'>
               <li><a href='index.php?page=products&action=viewAll'>Показать все</a></li>
               <li><a href='index.php?page=companies&action=view'>По компаниям</a></li>
-              <li><a href='index.php?page=products&action=view'>Наши продукты</a></li>
+ <?php
+  if(@$_COOKIE['userID'] && @$_COOKIE['companyID'])
+          {
+              echo "<li><a href='index.php?page=products&action=view'>Наши продукты</a></li>";
+          }
+                ?>
             </ul>
           </li>
          <script src='bootstrap.js'></script>
-          <script src='jquery.js'></script>
-          <li class='dropdown'>
-            <a href='#' class='dropdown-toggle' data-toggle='dropdown'>Контакты<b class='caret'></b></a>
-            <ul class='dropdown-menu'>
-              <li><a href='#'>Написать e-mail</a></li>
-              <li><a href='#'>Телефоны и факсы</a></li>
-              <li><a href='#'>На карте</a></li>
-            </ul>
-          </li>
-          <li><a href='#'>О нас</a></li>
+          <script src='jquery.js'></script> 
+          <script type='javascript' src="jquery.form.js"></script>
+          <li><a href='index.php?page=products&action=viewPic'>Картинки</a></li>
+          <?php
+          if(@$_COOKIE['userID'])
+          {
+            $nameUser = $_COOKIE['log'];
+              echo "
+               <li><a href='#'>Привет, $nameUser</a></li>
+               <li><a href='index.php?page=main&action=logout'>Выход</a></li>";
+          }
+          else {
+           echo "
+             <li><input type=text required name=login placeholder='Login' id='Login' value=></li>
+              <li>&nbsp; <input type=password required name=password placeholder='Password' id='Password'></li>
+              <li><a  href='#' onclick='login()' >Войти</a></li>
+              <li><a href='index.php?page=main&action=reg'>Зарегистрироваться</a></li>
+              <script>
+              function login()
+              {
+                var Login = $('#Login').val();
+                var Password = $('#Password').val();
+                $.ajax({
+                  type:'POST',
+                  url:'index.php?page=main&action=login',
+                  data:{login:Login,password:Password},
+                  dataType:'html',
+                  success:function(data)
+                  {
+                    document.location.href = 'http://companies.ru/';
+                  }
+                   });
+              }
+              </script>";
+          }
+          ?>
         </ul>
         
       </nav>

@@ -96,7 +96,7 @@ class user
 			main::set_cookie("userID", $userID);
 			main::set_cookie("log", $_POST["login"]);
 			main::set_cookie("pa", md5($_POST["passw"]));
-			header("Location: index.php"); 
+			//header("Location: index.php"); 
 		}
 	}
 	public static function logout()
@@ -104,7 +104,7 @@ class user
 		main::unset_cookie("userID", $userID);
 		main::unset_cookie("log", $_POST["login"]);
 		main::unset_cookie("pa", md5($_POST["passw"]));
-		header("Location: ".$_SERVER['HTTP_REFERER']); 
+		header("Location: index.php"); 
 	}
 	public static function checkUser()
 	{

@@ -29,19 +29,16 @@ class products
 	
 	public static function dots()
 	{
-		
+
 	}
 
 	public static function viewPic()
 	{
-
-		echo "<button onclick=\"document.getElementById('id_li2').className='active', document.getElementById('id_li1').className='';\">SET ACTIVE</button>";
-
 		echo "<div class='carousel slide' id='myCarousel'>
 		  <ol class='carousel-indicators'>
-		    <li id='id_li1' class='active' data-target='#myCarousel' data-slide-to='0'></li>
-		    <li id='id_li2' data-target='#myCarousel' data-slide-to='1'></li>
-		    <li data-target='#myCarousel' data-slide-to='2'></li>
+		    <li id='0' class='active' data-target='#myCarousel' data-slide-to='0'></li>
+		    <li id='1' data-target='#myCarousel' data-slide-to='1'></li>
+		    <li id='2' data-target='#myCarousel' data-slide-to='2'></li>
 		  </ol>
 		  <div class='carousel-inner'>
 		    <div class='item active'>
@@ -67,8 +64,50 @@ class products
 		    </div>
 		</div>
 		<script src='bootstrap.js'></script>
-		<a class='carousel-control left' data-slide='prev' href='#myCarousel'>&lsaquo;</a>
-		<a class='carousel-control right' data-slide='next' href='#myCarousel'>&rsaquo;</a>
+          <script src='jquery.js'></script> 
+		<script>
+			function prev()
+			{
+				console.log($(this));
+				if($('#0').hasClass('active'))
+				{
+					$('#0').removeClass('active');
+				 $('#2').addClass('active');
+				}
+				else if($('#1').hasClass('active'))
+				{
+					$('#1').removeClass('active');
+				$('#0').addClass('active');
+				}
+				else if($('#2').hasClass('active'))
+				{
+					 $('#2').removeClass('active');
+				 $('#1').addClass('active');
+				}
+			}
+		
+			function next()
+			{
+				console.log($(this));
+				if($('#0').hasClass('active'))
+				{
+					$('#0').removeClass('active');
+				 $('#1').addClass('active');
+				}
+				else if($('#1').hasClass('active'))
+				{
+					$('#1').removeClass('active');
+				$('#2').addClass('active');
+				}
+				else if($('#2').hasClass('active'))
+				{
+					 $('#2').removeClass('active');
+				 $('#0').addClass('active');
+				}
+			}
+		</script>
+		<a class='carousel-control left' onclick='prev()' data-slide='prev' href='#myCarousel'>&lsaquo;</a>
+		<a class='carousel-control right' onclick='next()' data-slide='next' href='#myCarousel'>&rsaquo;</a>
 		</div>";
 		$id = @$_GET["id"];
 		echo "<form method=post action=index.php?page=products&action=view&id=$id> 
@@ -80,10 +119,10 @@ class products
 		if($products_list)
 		{
 			echo "<form method=post id=text_new><h2>Продукция нашей компании</h2></form>";
+			
+			echo "<form method=post id=text_new action=index.php?page=products&action=insert> <input type=submit style='position:absolute; margin-left:290; top:110;' id='button_new' value='Добавить продукт'></form>";
 			products::search($all);
 			echo "
-			<form method=post id=text_new action=index.php?page=products&action=insert> <input class=show_all type=submit id='button_new' value='Добавить продукт''>
-			
 			<form method=post id=text_new>
 			<table class='tables'>
 			<tr class='tab_footer'>
@@ -250,12 +289,60 @@ class products
 			{
 				$nameCompany = $_GET['nameCompany'];
 			}
-			echo "<form method=post action=index.php?page=products&action=viewAll><input class=input placeholder='Компания' name=nameCompany id=search_box value=$nameCompany>";
-			echo "<input class=input placeholder='Продукт' name=nameProduct id=search_box value=$nameProduct><input class=button type=submit id='button_new' value='Поиск'/></form>";
-			if($nameProduct!="" || $nameCompany!="")
-			{
-				echo "<form method=post action=index.php?page=products&action=viewAll><input class=show_allp type=submit id='button_new' value='Показать все'></form>";
+			echo "<input class=input placeholder='Компания' name=nameCompany id=nC value=$nameCompany>";
+			echo "<input class=input placeholder='Продукт' name=nameProduct id=nP value=$nameProduct>
+			
+			<input class=button type=submit id='button_new'  onclick='compAjax()' value='Поиск'/><div id='tableCompany'>";
+			echo "<script>
+			var n = 0; 
+			function compAjax()
+			{ 
+				var nameCompany = $('#nC').val();
+				var nameProduct = $('#nP').val();
+				$.ajax({
+					type:'POST',
+					url:'comp.php',
+					data:{nameProduct:nameProduct,nameCompany:nameCompany},
+					dataType:'html',
+					success:function(data)
+					{
+						document.getElementById('tableCompany').innerHTML = data;
+					}
+				});
+					  
+				if($('#nC').val()!='' || $('#nP').val()!='')
+				{
+					n++;
+					if(n>1)
+					{
+						document.getElementById('button_new1').remove(); 
+					}
+					var btn = document.createElement('input')
+					btn.id = 'button_new1'
+					btn.type = 'button'
+					btn.value = 'Показать все'
+					btn.class = 'show_allp'
+					btn.setAttribute('onclick', 'click1();')
+					document.body.appendChild(btn)
+				}
 			}
+			function click1()
+			{
+				n=0;
+				document.getElementById('button_new1').remove();  
+				document.getElementById('nC').value = '';
+				document.getElementById('nP').value = '';
+				$.ajax({
+							type:'POST',
+							url:'comp.php',
+							dataType:'html',
+							success:function(data)
+							{
+								document.getElementById('tableCompany').innerHTML = data;
+							}
+						});
+			}
+			</script>";
 		}
 		else
 		{
@@ -327,7 +414,7 @@ class products
 	public static function insert()
 	{
 		$id=$_COOKIE['companyID'];
-		echo "<form id=text_new><h2>Добавить продукт</h2></form>
+		echo "<form action=index.php?page=products&action=insert id=text_new><h2>Добавить продукт</h2></form>
 		<br><form method=post id=text_new> 
 		Наименование
 		<br><input class=input required placeholder='Введите наименование' id=search_box name=nameProduct value=>  

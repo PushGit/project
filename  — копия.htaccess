@@ -1,0 +1,23 @@
+AddDefaultCharset utf-8
+<IfModule mod_charset.c>
+    CharsetDisable On
+    CharsetSourceEnc utf-8
+    CharsetDefault utf-8
+</IfModule>
+Options +FollowSymlinks
+
+
+    RewriteEngine On
+    RewriteBase /
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*) index.php [QSA,L]
+  # RewriteCond %{HTTP_HOST} ^companies\.ru$
+  # RewriteRule (.*) http://www.companies.ru/$1 [R=301,L]
+
+
+
+
+
+
+

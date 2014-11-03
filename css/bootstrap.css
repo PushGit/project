@@ -3477,7 +3477,7 @@ input[type="button"].btn-block {
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: 10;
   z-index: 1000;
   display: none;
   float: left;
@@ -4657,7 +4657,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
 .navbar-nav.pull-right > li > .dropdown-menu,
 .navbar-nav > li > .dropdown-menu.pull-right {
   right: 0;
-  left: auto;
+  left: 50;
 }
 
 .navbar-btn {

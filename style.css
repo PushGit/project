@@ -167,6 +167,31 @@ text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
 	border-top-color: #1b435e;
 	background: #1b435e; }
 
+	#button_new1 { 
+	border-top: 0px 
+	solid #65a9d7; 
+	border-left: 0px 
+	solid #65a9d7; 
+	border-bottom: 0px 
+	solid #65a9d7; 
+	border-right: 0px 
+	solid #65a9d7;
+	background: #65a9d7; 
+	padding: 2px 4px; 
+	color: #ffffff; 
+	font-size: 14px; 
+	font-family: Helvetica, Arial, Sans-Serif; 
+	box-shadow: 0 1px 2px #444;
+	
+	} 
+#button_new1:hover { 
+	
+	background: #0099ff; 
+	color: #ccc; } 
+#button_new1:active { 
+	border-top-color: #1b435e;
+	background: #1b435e; }
+
 .show_all{
 position: absolute;
 margin-left: 295px;	

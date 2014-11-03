@@ -67,7 +67,8 @@ class companies
 			else
 			{
 				$nameUser = $_COOKIE['log'];
-				$result = mysqli_query(dateBase::connect(), "SELECT * FROM users WHERE name = '$nameUser'");
+				
+				$result = mysqli_query(dateBase::connect(), "SELECT * FROM users WHERE name = '$nameUser'")or die(mysqli_error(dateBase::connect()));
 				while ($rslt = mysqli_fetch_row($result)) 
 				{ 
 					$id = $rslt[0]; 
@@ -76,14 +77,15 @@ class companies
 				$adress = $_POST['adress'];
 				$phone = $_POST['phone'];
 				dateBase::close_bd();
-
-				mysqli_query(dateBase::connect(), "INSERT INTO companies (name, adress, phone, userID) VALUES ('$name','$adress', '$phone', '$id')") or die(mysqli_error(dateBase::connect()));
+				
+				mysqli_query(dateBase::connect(), "INSERT INTO companies (nameCompany, adress, phone, userID) VALUES ('$name','$adress', '$phone', '$id')") or die(mysqli_error(dateBase::connect()));
 			   
 			    $result = mysqli_query(dateBase::connect(), "SELECT * FROM companies WHERE nameCompany = '$name'");
 				while ($rslt = mysqli_fetch_row($result)) 
 				{ 
 					$newID = $rslt[0]; 
 				}
+				
 				main::set_cookie("companyID","$newID");
 				dateBase::close_bd();
 				vCompanies::doneInsert();
